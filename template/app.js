@@ -12,6 +12,9 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+var cors = require('cors');
+app.use(cors());
+
 // API Auth
 const username = "#PROJECT#";
 const password = "#PROJECT#";
