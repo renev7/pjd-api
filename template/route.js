@@ -24,7 +24,11 @@ router.use(function(req, res, next) {
 
 router.get("/", function(req, res) {
 
-  // http://my.api.url/posts?sort=['title','ASC']&range=[0, 24]&filter={title:'bar'}
+  // http://localhost:3000/api/1/employee?sort=["employeeName","ASC"]&range=[0,2]&filter=["employeeLc","'TB0005190'"]
+
+  var filter = req.query.filter;
+  var ffield = JSON.parse(filter)[0];
+  var fvalue = JSON.parse(filter)[1];
 
   var sort = req.query.sort;
   var field = JSON.parse(sort)[0];
@@ -34,19 +38,23 @@ router.get("/", function(req, res) {
   var offset = JSON.parse(range)[0];
   var limit = JSON.parse(range)[1];
 
-  pool.getConnection(function(err, connection) {
+    pool.getConnection(function(err, connection) {
 
-    var sql = "select * from v#TABLE#";
-    sql = sql.concat(" order by ", field, " ", order);
-    sql = sql.concat(" limit ", limit, " offset ", offset);
+	    	var sql = "select * from v#TABLE#";
 
-    connection.query(sql, function (err, rows, fields) {
-      connection.release();
-      if (err) throw err;
-      res.header("X-Total-Count", rows.length);
-      res.json(rows);
+        sql = sql.concat(" where ", ffield, "=", fvalue);
+        sql = sql.concat(" order by ", field, " ", order);
+        sql = sql.concat(" limit ", limit, " offset ", offset);
+
+        console.log(sql);
+
+	    	connection.query(sql, function (err, rows, fields) {
+            connection.release();
+            if (err) throw err;
+            res.header("X-Total-Count", rows.length);
+            res.json(rows);
+        });
     });
-  });
 })
 
 router.post("/", function(req, res) {
