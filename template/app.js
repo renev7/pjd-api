@@ -15,6 +15,10 @@ app.use(bodyParser.json());
 var cors = require('cors');
 app.use(cors());
 
+app.use(cors({
+  exposedHeaders: ['X-Total-Count'],
+}));
+
 // API Auth
 const username = "#PROJECT#";
 const password = "#PROJECT#";
