@@ -86,7 +86,7 @@ router.get("/:id", function(req, res) {
 router.delete("/:id", function(req, res) {
     pool.getConnection(function(err, connection) {
 
-    		if(req.query	.delete=="true") {
+    		if(req.query.delete=="true") {
 	        connection.query("delete from #TABLE# where #TABLE#Id = ?", [req.params.id], function (err, rows, fields) {
 	            connection.release();
 	            if (err) throw err;
