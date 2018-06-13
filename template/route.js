@@ -93,7 +93,7 @@ router.delete("/:id", function(req, res) {
 	            res.json({message: "delete"});
 	        });
     		} else {
-    			connection.query("update #TABLE# set status=\"false\" where #TABLE#Id = ?", [req.params.id], function (err, rows, fields) {
+    			connection.query("update #TABLE# set #TABLE#Status=\"false\" where #TABLE#Id = ?", [req.params.id], function (err, rows, fields) {
     	            connection.release();
     	            if (err) throw err;
     	            res.json({message: "update"});
