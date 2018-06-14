@@ -26,7 +26,7 @@ router.get("/", function(req, res) {
 
   // http://localhost:3000/api/1/employee?sort=["employeeName","ASC"]&range=[0,2]&filter=["employeeLc","'TB0005190'"]
 
-  var sql = "select * from v#TABLE#";
+  var sql = "select *, #TABLE#Id as id from v#TABLE#";
 
   if(req.query.filter) {
     var filter = req.query.filter;
@@ -35,10 +35,10 @@ router.get("/", function(req, res) {
     sql = sql.concat(" where ", ffield, "=", fvalue);
   }
 
-  if(req.query.sort) {
-    var sort = req.query.sort;
-    var field = JSON.parse(sort)[0];
-    var order = JSON.parse(sort)[1];
+  if(req.query._sort) {
+    //var sort = req.query.sort;
+    var field = req.query._sort;
+    var order = req.query._order;
     sql = sql.concat(" order by ", field, " ", order);
   }
 
@@ -105,6 +105,7 @@ router.delete("/:id", function(req, res) {
 router.put("/:id", function(req, res) {
     pool.getConnection(function(err, connection) {
         var update = "update #TABLE# set ? where #TABLE#Id = ?";
+        delete req.body["id"];
         connection.query(update, [req.body, req.params.id], function (err, rows, fields) {
             connection.release();
             if (err) throw err;
